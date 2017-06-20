@@ -28,6 +28,7 @@ export default class AppJson {
   }
 
   get currentEnvironment (): ?AppEnvironment {
+    if (!Git.hasGit) return
     const environments = this._app.environments
     if (!environments) return
     const branch = Git.branch()

@@ -246,12 +246,12 @@ export default class Status extends Command {
             return Git.checkIgnore(f)
           }
         })
-        .pipe(zlib.createGzip())
-        .on('data', d => {
-          hashers.md5.update(d)
-          hashers.sha256.update(d)
-        })
-        .pipe(fs.createWriteStream(this.tarballFile))
+          .pipe(zlib.createGzip())
+          .on('data', d => {
+            hashers.md5.update(d)
+            hashers.sha256.update(d)
+          })
+          .pipe(fs.createWriteStream(this.tarballFile))
         return new Promise((resolve, reject) => {
           pack.on('error', reject)
           pack.on('close', () => {
@@ -291,8 +291,8 @@ export default class Status extends Command {
           body: {
             source_blob: {
               checksum: `SHA256:${this.tarballHash.sha256}`,
-              version: await Git.sha(),
-              version_description: await Git.description(),
+              version: Git.hasGit ? await Git.sha() : null,
+              version_description: Git.hasGit ? await Git.description() : null,
               url: this.source.source_blob.get_url
             }
           }
